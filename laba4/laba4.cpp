@@ -159,6 +159,7 @@ struct List{
             NodeCity<T>* temp = first;
             first = first->next;
             delete temp;
+            cnt--;
         }
         first = nullptr;
         last = nullptr;
@@ -220,6 +221,7 @@ Information input() {
 
 int main()
 {
+    system("chcp 1251>NULL");
     List<Information> List;
     string region = "";
 
@@ -234,50 +236,57 @@ int main()
     cout << "9. завершения работы программы" << endl;
 
     while (true) {
-        int numb;
-        cin >> numb;
-        switch (numb) {
-        case 1:
-            List.add(input());
-            break;
-        case 2:
-            int index;
-            cout << "На какую позицию вставить элемент?" << endl;
-            cin >> index;
-            List.insert(index, input());
-            break;
-        case 3:
-            int index1;
-            cout << "Введите индекс элемента для удаления" << endl;
-            cin >> index1;
-            List.removeAt(index1);
-            break;
-        case 4:
-            int index2;
-            cout << "Введите индекс элемента для вывода" << endl;
-            cin >> index2;
-            cout << "На этом месте находится элемент: " << List.elementAt(index2).city << " " << List.elementAt(index2).region << " " << List.elementAt(index2).population << endl;
-            break;
-        case 5:
-            cout << "Количество элементов в коллекции: " << List.count() << endl;
-            break;
-        case 6:
-            List.clear();
-            cout << "Список пуст!" << endl;
-            break;
-        case 7:
-            sortRegions(List);
-            break;
-        case 8:
-            cout << "Введите регион для удаления: ";
-            cin >> region;
-            removeRegion(region, List);
-            break;
-        case 9:
-            return 0;
-        default:
-            cout << "Ошибка!!! Введите корректный номер команды!";
-            break;
+        try {
+            int numb;
+            cin >> numb;
+            switch (numb) {
+            case 1:
+                List.add(input());
+                break;
+            case 2:
+                int index;
+                cout << "На какую позицию вставить элемент?" << endl;
+                cin >> index;
+                List.insert(index, input());
+                break;
+            case 3:
+                int index1;
+                cout << "Введите индекс элемента для удаления" << endl;
+                cin >> index1;
+                List.removeAt(index1);
+                break;
+            case 4:
+                int index2;
+                cout << "Введите индекс элемента для вывода" << endl;
+                cin >> index2;
+                cout << "На этом месте находится элемент: " << List.elementAt(index2).city << " " << List.elementAt(index2).region << " " << List.elementAt(index2).population << endl;
+                break;
+            case 5:
+                cout << "Количество элементов в коллекции: " << List.count() << endl;
+                break;
+            case 6:
+                List.clear();
+                cout << "Список пуст!" << endl;
+                break;
+            case 7:
+                sortRegions(List);
+                break;
+            case 8:
+                cout << "Введите регион для удаления: ";
+                cin >> region;
+                removeRegion(region, List);
+                break;
+            case 9:
+                return 0;
+            default:
+                cout << "Ошибка!!! Введите корректный номер команды!";
+                break;
+            }
+        }
+        catch (int error) {
+            if (error == 0) {
+                cout << "Введен некорректный индекс!" << endl;
+            }
         }
     }
 }
