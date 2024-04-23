@@ -71,8 +71,8 @@ struct List{
 
 	//вставка по индексу
 	void insert(int index, T information) {
-        if (index < 0 || index >= cnt) {
-            return;
+        if (index < 0 || index > cnt) {
+            throw 0;
         }
         toIndex(index);
         if (index == 0) {
@@ -82,6 +82,10 @@ struct List{
             newNode->next = first;
             first->prev = newNode;
             first = first -> prev;
+        }
+        if (index == cnt) {
+            add(information);
+            return;
         }
         else {
             NodeCity<T>* temp = first;
@@ -103,7 +107,7 @@ struct List{
 	//удаление по индексу
 	void removeAt(int index) {
         if (index < 0 || index >= cnt) {
-            return;
+            throw 0;
         }
         NodeCity<T>* temp = first;
         toIndex(index);
