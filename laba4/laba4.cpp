@@ -75,24 +75,18 @@ struct List {
             add(information);
             return;
         }
-        if (index == 0) {
-            NodeCity<T>* newNode = new NodeCity <T>;
-            newNode->Information = information;
-            newNode->prev = nullptr;
-            newNode->next = first;
-            first->prev = newNode;
-            first = first->prev;
-        }
-        if (index == cnt) {
-            add(information);
-            return;
-        }
         toIndex(index);
-            NodeCity<T>* newNode = new NodeCity<T>;
-            newNode->Information = information;
-            newNode->prev = now->prev;
-            newNode->next = now;
-            now->prev = newNode;
+        NodeCity<T>* newNode = new NodeCity<T>;
+        newNode->Information = information;
+        newNode->prev = now->prev;
+        newNode->next = now;
+        now->prev = newNode;
+        if (newNode->prev != nullptr) {
+            newNode->prev->next = newNode;
+        }
+        else {
+            first = newNode;
+        }
         cnt++;
         position++;
     }
