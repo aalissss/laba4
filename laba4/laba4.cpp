@@ -74,31 +74,20 @@ struct List{
         if (index < 0 || index > cnt) {
             throw 0;
         }
-        toIndex(index);
-        if (index == 0) {
-            NodeCity<T>* newNode = new NodeCity <T>;
-            newNode->Information = information;
-            newNode->prev = nullptr;
-            newNode->next = first;
-            first->prev = newNode;
-            first = first -> prev;
-        }
         if (index == cnt) {
             add(information);
             return;
+        }   
+        toIndex(index);
+        NodeCity<T>* newNode = new NodeCity<T>();
+        newNode->Information = information;
+        newNode->prev = now->prev;
+        now->prev = newNode;
+        if (newNode->prev != nullptr) {
+            newNode->prev = newNode;
         }
         else {
-            NodeCity<T>* temp = first;
-            for (int i = 0; i < index - 1; i++) {
-                temp = temp->next;
-            }
-            NodeCity<T>* newNode = new NodeCity<T>;
-            newNode->Information = information;
-            newNode->prev = temp;
-            newNode->next = temp->next;
-            temp->next->prev = newNode;
-            temp->next = newNode;
-            temp = temp->next;
+            first = newNode;
         }
         cnt++;
         position++;
@@ -107,7 +96,7 @@ struct List{
 	//удаление по индексу
 	void removeAt(int index) {
         if (index < 0 || index >= cnt) {
-            throw 0;
+            return;
         }
         NodeCity<T>* temp = first;
         toIndex(index);
