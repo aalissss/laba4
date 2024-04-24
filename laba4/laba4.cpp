@@ -4,30 +4,29 @@ using namespace std;
 
 //структура информации для узла
 struct Information {
-	string city = "";
-	string region = "";
-	int population = 0;
+    string city = "";
+    string region = "";
+    int population = 0;
 };
 
 //структура узла
 template <typename T>
 struct NodeCity {
-	T Information;
-	NodeCity* next = nullptr;
-	NodeCity* prev = nullptr;
+    T Information;
+    NodeCity* next = nullptr;
+    NodeCity* prev = nullptr;
 };
 
 //структура списка
 template <typename T>
-struct List{
-    T information;
-	NodeCity<T>* first = nullptr;
-	NodeCity<T>* last = nullptr;
+struct List {
+    NodeCity<T>* first = nullptr;
+    NodeCity<T>* last = nullptr;
     NodeCity<T>* now = nullptr;
-	int cnt = 0;
+    int cnt = 0;
     int position = 0;
 
-    //доступ к индексу
+    //доступ к индексу 
     void toIndex(int index) {
         if (abs(index - position) > (cnt - 1 - index)) {
             now = last;
@@ -44,14 +43,14 @@ struct List{
         }
         else {
             for (int i = 0; i < position - index; i++) {
-                now = now->prev; 
-            } 
+                now = now->prev;
+            }
         }
         position = index;
     }
 
-	//добавление элемента в конец списка
-	void add(T information) {
+    //добавление элемента в конец списка 
+    void add(T information) {
         NodeCity<T>* newNode = new NodeCity <T>;
         newNode->Information = information;
         newNode->next = nullptr;
@@ -67,86 +66,85 @@ struct List{
             last = newNode;
         }
         cnt++;
-	}
+    }
 
-	//вставка по индексу
-	void insert(int index, T information) {
-        if (index < 0 || index > cnt) {
-            throw 0;
-        }
-        if (index == cnt) {
-            add(information);
-            return;
-        }   
-        toIndex(index);
-        NodeCity<T>* newNode = new NodeCity<T>();
-        newNode->Information = information;
-        newNode->prev = now->prev;
-        now->prev = newNode;
-        if (newNode->prev != nullptr) {
-            newNode->prev = newNode;
-        }
-        else {
-            first = newNode;
-        }
-        cnt++;
-        position++;
-	}
-
-	//удаление по индексу
-	void removeAt(int index) {
+    //вставка по индексу 
+    void insert(int index, T information) {
         if (index < 0 || index >= cnt) {
             return;
         }
-        NodeCity<T>* temp = first;
         toIndex(index);
         if (index == 0) {
-            first = first->next;
-            if (first != nullptr) {
-                first->prev = nullptr;
-            }
-            else {
-                last = nullptr;
-            }
-            delete temp;
-            now = first;
-            cnt--;
-            position--;
+            NodeCity<T>* newNode = new NodeCity <T>;
+            newNode->Information = information;
+            newNode->prev = nullptr;
+            newNode->next = first;
+            first->prev = newNode;
+            first = first->prev;
         }
         else {
-            for (int i = 0; i < index - 1; i++) {
-                temp = temp->next;
-            }
-            NodeCity<T>* current = temp->next;
-            temp->next = temp->next->next;
-            if (temp->next != nullptr) {
-                temp->next->prev = temp;
-            }
-            else {
-                last = temp;
-            }
-            delete current;
-            cnt--;
-            position--;
+            NodeCity<T>* newNode = new NodeCity<T>;
+            newNode->Information = information;
+            newNode->prev = now->prev;
+            newNode->next = now;
+            now->prev = newNode;
         }
-	}
+        cnt++;
+        position++;
+    }
 
-	//доступ к информационной части элемента в заданной позиции
-	T elementAt(int index) {
+    //удаление по индексу 
+    void removeAt(int index) {
+        if (index < 0 || index >= cnt) {
+            return;
+        }
+        toIndex(index);
+        NodeCity<T>* temp = now;
+        if (cnt == 1) {
+            clear();
+            return;
+        }
+        else if (index == 0) {
+            first = now->next;
+            first->prev = nullptr;
+            now = first;
+            delete temp;
+            cnt--;
+        }
+        else if (index == cnt - 1) {
+            last = now->prev;
+            last->next = nullptr;
+            now = last;
+            position--;
+            delete temp;
+            cnt--;
+        }
+        else {
+            now = now->next;
+            temp->next->prev = temp->prev;
+            temp->prev->next = temp->next;
+            delete temp;
+            cnt--;
+        }
+    }
+
+    //доступ к информационной части элемента в заданной позиции 
+    T elementAt(int index) {
         if (index < 0 || index >= cnt) {
             throw 0;
         }
         toIndex(index);
         return now->Information;
-	}
+    }
 
-	//количество элементов в коллекции
-	int count() {
-		return cnt;
-	}
+    //количество элементов в коллекции 
+    int count() {
+        return cnt;
+    }
 
-	//удаление всех элементов
-	void clear() {
+
+    //удаление всех элементов 
+    void clear() {
         int kol = cnt;
         for (int i = 0; i < kol; i++) {
             NodeCity<T>* temp = first;
@@ -159,11 +157,11 @@ struct List{
         now = nullptr;
         cnt = 0;
         position = 0;
-	}
+    }
 };
 
 //удаление узлов с заданным регионом
-void removeRegion(string region, List<Information> &list) {
+void removeRegion(string region, List<Information>& list) {
     for (int i = 0; i < list.count(); i++) {
         if (list.elementAt(i).region == region) {
             list.removeAt(i);
@@ -171,6 +169,8 @@ void removeRegion(string region, List<Information> &list) {
         }
     }
 }
+
+
 
 //вывод регионов отсортированных по населению
 void sortRegions(List<Information> list) {
@@ -218,7 +218,7 @@ int main()
     List<Information> List;
     string region = "";
 
-	setlocale(LC_ALL, "Russian");
+    setlocale(LC_ALL, "Russian");
 
     cout << "Введите число для:" << endl;
     cout << "1. добавления элементов в конец списка" << endl << "2. вставки элемента в заданную позицию" << endl;
@@ -227,6 +227,7 @@ int main()
     cout << "7. вывода наименования регионов в упорядоченном по убыванию суммарной численности городского населения" << endl;
     cout << "8. удаления узлов, хранящих информацию о городах указанного региона" << endl;
     cout << "9. завершения работы программы" << endl;
+
 
     while (true) {
         try {
