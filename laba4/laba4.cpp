@@ -53,9 +53,7 @@ struct List {
     void add(T information) {
         NodeCity<T>* newNode = new NodeCity <T>;
         newNode->Information = information;
-        newNode->next = nullptr;
-        newNode->prev = nullptr;
-        if (first == nullptr) {
+        if (cnt == 0) {
             first = newNode;
             last = newNode;
             now = newNode;
@@ -70,10 +68,13 @@ struct List {
 
     //вставка по индексу 
     void insert(int index, T information) {
-        if (index < 0 || index >= cnt) {
+        if (index < 0 || index > cnt) {
             return;
         }
-        toIndex(index);
+        if (index == cnt) {
+            add(information);
+            return;
+        }
         if (index == 0) {
             NodeCity<T>* newNode = new NodeCity <T>;
             newNode->Information = information;
@@ -82,13 +83,16 @@ struct List {
             first->prev = newNode;
             first = first->prev;
         }
-        else {
+        if (index == cnt) {
+            add(information);
+            return;
+        }
+        toIndex(index);
             NodeCity<T>* newNode = new NodeCity<T>;
             newNode->Information = information;
             newNode->prev = now->prev;
             newNode->next = now;
             now->prev = newNode;
-        }
         cnt++;
         position++;
     }
