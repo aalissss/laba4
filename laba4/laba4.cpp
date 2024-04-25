@@ -177,7 +177,11 @@ void sortRegions(List<Information> list) {
         bool isIn = false;
         for (int j = 0; j < regions.count(); j++) {
             if (regions.elementAt(j).region == list.elementAt(i).region) {
-                regions.now->Information.population += list.elementAt(i).population;
+                Information  temp;
+                temp.population = regions.elementAt(j).population + list.elementAt(i).population;
+                temp.region = regions.elementAt(j).region;
+                regions.add(temp);
+                regions.removeAt(j);
                 isIn = true;
                 break;
             }
@@ -189,7 +193,8 @@ void sortRegions(List<Information> list) {
     for (int i = 0; i < regions.count(); i++) {
         for (int j = 0; j < regions.count() - 1; j++) {
             if (regions.elementAt(j).population < regions.elementAt(j + 1).population) {
-                swap(regions.now->prev->Information, regions.now->Information);
+                regions.insert(j, regions.elementAt(j + 1));
+                regions.removeAt(j + 2);
             }
         }
     }
@@ -197,6 +202,7 @@ void sortRegions(List<Information> list) {
         cout << regions.elementAt(i).region << endl;
     }
 }
+
 
 //ввод элементов
 Information input() {
